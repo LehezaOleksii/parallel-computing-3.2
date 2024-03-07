@@ -1,6 +1,7 @@
 package oleksii.leheza.labs.tpo.fox;
 
 import oleksii.leheza.labs.tpo.Result;
+import oleksii.leheza.labs.tpo.matrix.Matrix;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -8,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 public class FoxMatrixMultiplication {
 
-    public void foxMatrixMultiply(int[][] firstMatrix, int[][] secondMatrix, int threadAmount, Result result) {
-        int matrixLength = firstMatrix.length;
+    public void foxMatrixMultiply(Matrix firstMatrix, Matrix secondMatrix, int threadAmount, Result result) {
+        int matrixLength = firstMatrix.getMatrixSize();
 
         threadAmount = Math.min(threadAmount, matrixLength);
 
@@ -64,10 +65,10 @@ public class FoxMatrixMultiplication {
         }
     }
 
-    private int[][] copyBlock(int[][] matrix, int i, int j, int size) {
+    private int[][] copyBlock(Matrix matrix, int i, int j, int size) {
         int[][] block = new int[size][size];
         for (int k = 0; k < size; k++) {
-            System.arraycopy(matrix[k + i], j, block[k], 0, size);
+            System.arraycopy(matrix.getRow(k+i), j, block[k], 0, size);
         }
         return block;
     }
