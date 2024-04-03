@@ -1,0 +1,116 @@
+package oleksii.leheza.labs.tpo.striped.alghorihm;
+
+import oleksii.leheza.labs.tpo.striped.Synchronizer;
+import oleksii.leheza.labs.tpo.striped.matrix.Matrix;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class ClassicThread extends Thread {
+    protected int iteration;
+
+    protected Matrix result;
+
+    protected BlockingQueue<int[]> columns = new LinkedBlockingQueue<>();
+
+    protected int[] lastColumn;
+
+    protected BlockingQueue<int[]> rows = new LinkedBlockingQueue<>();
+
+
+    protected ClassicThread nextThread;
+
+    public final Object lockObj = new Object();
+    protected int matrixLength;
+
+    protected Synchronizer synchronizer;
+
+    public ClassicThread(Matrix result, int iteration, int matrixLength, Synchronizer synchronizer) {
+        this.result = result;
+        this.iteration = iteration;
+        this.matrixLength = matrixLength;
+        this.synchronizer = synchronizer;
+        lastColumn = new int[result.getMatrixSize()];
+    }
+
+    @Override
+    public void run() {
+        multiply();
+    }
+
+    protected void multiply() {
+        int[] row;
+        int[] column;
+        while (!synchronizer.getAlgorithmEnd()) {
+            for (int i = 0; i < matrixLength; i++) {
+                while (rows.isEmpty()) {
+                    try {
+                        synchronized (lockObj) {
+                            lockObj.wait();
+                        }
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                try {
+                    if (i == matrixLength - 1) {
+                        column = lastColumn;
+                    } else {
+                        column = columns.take();
+                    }
+                    row = rows.take();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                if (nextThread != null) {
+                    if (i == 0) {
+                        nextThread.setValueToLastColumn(column);
+                    } else {
+                        nextThread.addColumnToQueue(column);
+                    }
+                    nextThread.addRowToQueue(row);
+                    synchronized (nextThread.lockObj) {
+                        nextThread.lockObj.notify();
+                    }
+                }
+
+                int sum = 0;
+                for (int n = 0; n < row.length; n++) {
+                    sum += row[n] * column[n];
+                }
+
+                int columnNumber = (i + iteration) % matrixLength;
+                result.matrix[i][columnNumber] = sum;
+            }
+            synchronized (synchronizer) {
+                while (synchronizer.getCycleEnd()) {
+                    try {
+                        synchronizer.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
+
+    public void addColumnToQueue(int[] column) {
+        columns.add(column);
+    }
+
+    public void addRowToQueue(int[] row) {
+        rows.add(row);
+    }
+
+    public void setValueToLastColumn(int[] column) {
+        lastColumn = column;
+    }
+
+    public void setSubThread(ClassicThread classicThread) {
+        nextThread = classicThread;
+    }
+
+    public void setIteration(int iteration) {
+        this.iteration = iteration;
+    }
+}
