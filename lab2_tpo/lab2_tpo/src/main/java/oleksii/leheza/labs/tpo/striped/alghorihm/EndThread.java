@@ -1,13 +1,13 @@
 package oleksii.leheza.labs.tpo.striped.alghorihm;
 
+import oleksii.leheza.labs.tpo.matrix.Result;
 import oleksii.leheza.labs.tpo.striped.Synchronizer;
-import oleksii.leheza.labs.tpo.striped.matrix.Matrix;
 
 public class EndThread extends ClassicThread {
 
     public Synchronizer synchronizer;
 
-    public EndThread(Matrix result, int iteration, int matrixLength, Synchronizer synchronizer) {
+    public EndThread(Result result, int iteration, int matrixLength, Synchronizer synchronizer) {
         super(result, iteration, matrixLength, synchronizer);
         this.synchronizer = synchronizer;
     }

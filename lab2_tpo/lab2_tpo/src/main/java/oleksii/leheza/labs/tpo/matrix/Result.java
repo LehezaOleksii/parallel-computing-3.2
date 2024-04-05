@@ -1,16 +1,16 @@
-package oleksii.leheza.labs.tpo.striped.matrix;
+package oleksii.leheza.labs.tpo.matrix;
 
-public class Matrix {
+public class Result {
 
     public final int[][] matrix;
     private final int matrixSize;
 
-    public Matrix(int matrixSize) {
+    public Result(int matrixSize) {
         matrix = new int[matrixSize][matrixSize];
         this.matrixSize = matrixSize;
     }
 
-    public Matrix(int[][] matrix) {
+    public Result(int[][] matrix) {
         this.matrix = matrix;
         this.matrixSize = matrix.length;
     }

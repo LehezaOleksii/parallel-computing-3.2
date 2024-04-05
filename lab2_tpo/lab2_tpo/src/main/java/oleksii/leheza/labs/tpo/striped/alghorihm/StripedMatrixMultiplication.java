@@ -1,7 +1,8 @@
 package oleksii.leheza.labs.tpo.striped.alghorihm;
 
+import oleksii.leheza.labs.tpo.matrix.Result;
+import oleksii.leheza.labs.tpo.matrix.Matrix;
 import oleksii.leheza.labs.tpo.striped.Synchronizer;
-import oleksii.leheza.labs.tpo.striped.matrix.Matrix;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,13 +12,13 @@ public class StripedMatrixMultiplication {
     private Matrix firstMatrix;
     private Matrix secondMatrix;
     private int threadsAmount;
-    private Matrix result;
+    private Result result;
     private final Object lock = new Object();
 
     private Synchronizer synchronizer;
 
 
-    public StripedMatrixMultiplication(Matrix firstMatrix, Matrix secondMatrix, int threadsAmount, Matrix result) {
+    public StripedMatrixMultiplication(Matrix firstMatrix, Matrix secondMatrix, int threadsAmount, Result result) {
         this.firstMatrix = firstMatrix;
         this.secondMatrix = secondMatrix;
         this.threadsAmount = threadsAmount;

@@ -11,7 +11,7 @@ public class MatrixUtil {
         Matrix matrix = new Matrix(matrixSize);
         for (int i = 0; i < matrixSize; i++) {
             for (int j = 0; j < matrixSize; j++) {
-                matrix.setValue(i,j,random.nextInt() % 10);
+                matrix.matrix[i][j] = random.nextInt() % 10;
             }
         }
         return matrix;

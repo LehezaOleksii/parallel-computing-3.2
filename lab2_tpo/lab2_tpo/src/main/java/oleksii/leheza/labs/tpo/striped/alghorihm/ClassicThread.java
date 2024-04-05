@@ -1,7 +1,7 @@
 package oleksii.leheza.labs.tpo.striped.alghorihm;
 
+import oleksii.leheza.labs.tpo.matrix.Result;
 import oleksii.leheza.labs.tpo.striped.Synchronizer;
-import oleksii.leheza.labs.tpo.striped.matrix.Matrix;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -9,14 +9,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ClassicThread extends Thread {
     protected int iteration;
 
-    protected Matrix result;
+    protected Result result;
 
     protected BlockingQueue<int[]> columns = new LinkedBlockingQueue<>();
 
     protected int[] lastColumn;
 
     protected BlockingQueue<int[]> rows = new LinkedBlockingQueue<>();
-
 
     protected ClassicThread nextThread;
 
@@ -25,7 +24,7 @@ public class ClassicThread extends Thread {
 
     protected Synchronizer synchronizer;
 
-    public ClassicThread(Matrix result, int iteration, int matrixLength, Synchronizer synchronizer) {
+    public ClassicThread(Result result, int iteration, int matrixLength, Synchronizer synchronizer) {
         this.result = result;
         this.iteration = iteration;
         this.matrixLength = matrixLength;

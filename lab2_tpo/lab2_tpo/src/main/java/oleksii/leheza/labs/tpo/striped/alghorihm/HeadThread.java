@@ -1,6 +1,7 @@
 package oleksii.leheza.labs.tpo.striped.alghorihm;
+
+import oleksii.leheza.labs.tpo.matrix.Result;
 import oleksii.leheza.labs.tpo.striped.Synchronizer;
-import oleksii.leheza.labs.tpo.striped.matrix.Matrix;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -17,7 +18,7 @@ public class HeadThread extends ClassicThread {
     public Synchronizer synchronizer;
 
 
-    public HeadThread(Matrix result, int iteration, int matrixLength, Object lock, Synchronizer synchronizer) {
+    public HeadThread(Result result, int iteration, int matrixLength, Object lock, Synchronizer synchronizer) {
         super(result, iteration, matrixLength, synchronizer);
         this.lock = lock;
         this.synchronizer = synchronizer;

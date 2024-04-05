@@ -2,7 +2,7 @@ package oleksii.leheza.labs.tpo.matrix;
 
 public class Matrix {
 
-    private final int[][] matrix;
+    public final int[][] matrix;
     private final int matrixSize;
 
     public Matrix(int matrixSize) {
@@ -22,22 +22,16 @@ public class Matrix {
     public int[] getColumn(int columnNumber) {
         int[] column = new int[matrixSize];
         for (int i = 0; i < matrixSize; i++) {
-            column[i] = matrix[columnNumber][i];
+            column[i] = matrix[i][columnNumber];
         }
         return column;
     }
 
-    public void setValue(int row, int column, int value) {
-        matrix[row][column] = value;
-    }
-
-    public void plusValue(int row, int column, int value) {
-        matrix[row][column] += value;
-    }
-    public int getValue(int row, int column) {
-        return matrix[row][column];
-    }
     public int getMatrixSize() {
         return matrixSize;
+    }
+
+    public int[][] getMatrix() {
+        return matrix;
     }
 }
