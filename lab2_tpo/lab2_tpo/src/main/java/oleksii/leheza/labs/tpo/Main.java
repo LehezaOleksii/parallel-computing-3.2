@@ -32,7 +32,7 @@ public class Main {
         long endTime2 = System.currentTimeMillis();
 
         long startTime3 = System.currentTimeMillis();
-        foxMatrixMultiplication.foxMatrixMultiply(matrix, matrix, threadAmount, result3);
+        foxMatrixMultiplication.foxMatrixMultiply(matrix, matrix, result3,threadAmount);
         long endTime3 = System.currentTimeMillis();
         double resultTime1 = endTime1 - startTime1;
         double resultTime2 = endTime2 - startTime2;
@@ -51,9 +51,6 @@ public class Main {
                 "\nStriped matrix multiplication: " + resultTime2 + "; speedup = " + resultTime1 / resultTime2+
                 "\nFox matrix multiplication: " + resultTime3 + "; speedup = " + resultTime1 / resultTime3
         );
-        System.out.println("Are first and second result equal: " + matrixUtil.isMatricesEqual(result1.getMatrix(), result2.getMatrix()));
-        System.out.println("Are first and third result equal: " + matrixUtil.isMatricesEqual(result1.getMatrix(), result3.getMatrix()));
-
     }
 
     public static void printMatrix(int[][] matrix) {

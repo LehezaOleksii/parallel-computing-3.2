@@ -30,8 +30,4 @@ public class Result {
     public int getMatrixSize() {
         return matrixSize;
     }
-
-    public int[][] getMatrix() {
-        return matrix;
-    }
 }

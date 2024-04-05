@@ -9,14 +9,20 @@ import java.util.concurrent.TimeUnit;
 
 public class FoxMatrixMultiplication {
 
-    public void foxMatrixMultiply(Matrix firstMatrix, Matrix secondMatrix, int threadAmount, Result result) {
+    public void foxMatrixMultiply(Matrix firstMatrix, Matrix secondMatrix, Result result,int thread) {
         int matrixSize = firstMatrix.getMatrixSize();
-        ExecutorService executor = Executors.newFixedThreadPool(threadAmount);
-        for (int i = 0; i < threadAmount; i++) {
-            int start = i * matrixSize / threadAmount;
-            int end = (i + 1) * matrixSize / threadAmount;
-            executor.submit(new FoxMatrixMultiplicationThread(firstMatrix.matrix, secondMatrix.matrix, result, start, end));
+        int blockSize = matrixSize /2 ;
+        ExecutorService executor = Executors.newFixedThreadPool(thread);
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                int startX = i * blockSize;
+                int startY = j * blockSize;
+                int endX = startX + blockSize;
+                int endY = startY + blockSize;
+                executor.submit(new FoxMatrixMultiplicationThread(firstMatrix.matrix, secondMatrix.matrix, result.matrix, startX, endX, startY, endY));
+            }
         }
+
         executor.shutdown();
         try {
             executor.awaitTermination(60000, TimeUnit.MILLISECONDS);

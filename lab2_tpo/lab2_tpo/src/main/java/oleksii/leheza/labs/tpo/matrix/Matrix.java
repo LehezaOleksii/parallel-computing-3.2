@@ -10,11 +10,6 @@ public class Matrix {
         this.matrixSize = matrixSize;
     }
 
-    public Matrix(int[][] matrix) {
-        this.matrix = matrix;
-        this.matrixSize = matrix.length;
-    }
-
     public int[] getRow(int rowNumber) {
         return matrix[rowNumber];
     }

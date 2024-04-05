@@ -1,34 +1,49 @@
 package oleksii.leheza.labs.tpo.fox;
 
-import oleksii.leheza.labs.tpo.matrix.Result;
-
 public class FoxMatrixMultiplicationThread implements Runnable {
+    private final int[][] firstMatrix;
+    private final int[][] secondMatrix;
+    private final int[][] resultMatrix;
+    private final int startX;
+    private final int endX;
+    private final int startY;
+    private final int endY;
 
-    private final int[][] firstMatrixBlock;
-    private final int[][] secondMatrixBlock;
-    private final Result result;
-    private final int startStep;
-    private final int endStep;
-
-    public FoxMatrixMultiplicationThread(int[][] firstMatrixBlock, int[][] secondMatrixBlock, Result result, int startStep, int endStep) {
-        this.firstMatrixBlock = firstMatrixBlock;
-        this.secondMatrixBlock = secondMatrixBlock;
-        this.result = result;
-        this.startStep = startStep;
-        this.endStep = endStep;
+    public FoxMatrixMultiplicationThread(int[][] firstMatrix, int[][] secondMatrix, int[][] resultMatrix, int startX, int endX, int startY, int endY) {
+        this.firstMatrix = firstMatrix;
+        this.secondMatrix = secondMatrix;
+        this.resultMatrix = resultMatrix;
+        this.startX = startX;
+        this.endX = endX;
+        this.startY = startY;
+        this.endY = endY;
     }
 
     @Override
     public void run() {
-        int n = firstMatrixBlock.length;
-        int matrixSize = result.matrix.length;
-        for (int i = startStep; i < endStep; i++) {
-            for (int j = 0; j < n; j++) {
-                int sum = 0;
+        int blockSize = endX - startX;
+        int n = firstMatrix.length;
+
+        for (int i = startX; i < endX; i++) {
+            for (int j = startY; j < endY; j++) {
                 for (int k = 0; k < n; k++) {
-                    sum += firstMatrixBlock[i][(i + j + k) % n] * secondMatrixBlock[(i + j + k) % n][j];
+                    resultMatrix[i][j] += firstMatrix[i][k] * secondMatrix[k][j];
                 }
-                result.matrix[i][j] += sum;
+            }
+        }
+
+        // Perform shift operation
+        int[][] tempMatrix = new int[blockSize][blockSize];
+        for (int i = startX; i < endX; i++) {
+            for (int j = startY; j < endY; j++) {
+                tempMatrix[i - startX][j - startY] = resultMatrix[i][j];
+            }
+        }
+
+        for (int i = startX; i < endX; i++) {
+            for (int j = startY; j < endY; j++) {
+                int shiftRow = (i + startX + 1) % blockSize;
+                resultMatrix[i][j] = tempMatrix[shiftRow][j - startY];
             }
         }
     }
