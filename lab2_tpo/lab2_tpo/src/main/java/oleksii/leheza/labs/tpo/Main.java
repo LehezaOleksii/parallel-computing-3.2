@@ -11,7 +11,6 @@ public class Main {
 
     public static void main(String[] args) {
         int matrixSize = 1000;
-        int threadAmount = 4;
         MatrixUtil matrixUtil = new MatrixUtil();
         Matrix matrix = matrixUtil.initializeRandomMatrix(matrixSize);
 //       printMatrix(matrix);
