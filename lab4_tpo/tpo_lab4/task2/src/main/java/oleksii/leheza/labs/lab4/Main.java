@@ -1,40 +1,59 @@
 package oleksii.leheza.labs.lab4;
 
-import oleksii.leheza.labs.lab4.entities.Folder;
-import oleksii.leheza.labs.lab4.service.WordCounter;
+import oleksii.leheza.labs.lab4.bank.synch.BankSynch;
+import oleksii.leheza.labs.lab4.bank.synch.TransferThreadSynch;
+import oleksii.leheza.labs.lab4.fork.TransferTask;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
+import java.util.concurrent.ForkJoinPool;
 
-public class Main {
-    public static void main(String[] args) throws IOException {
-        Folder folder = Folder.fromDirectory(new File("C:\\Users\\Legza Aleksey\\Desktop\\Университет\\3 курс\\ТПО\\labs\\lab4_tpo\\tpo_lab4\\task1\\src\\main\\resources"));
-        WordCounter wordCounter = new WordCounter();
-        WordCounter wordCounterSimple = new WordCounter();
-        long startTimeParallel;
-        long startTimeSimple;
-        Map<Integer, Integer> wordsVocabulary;
-        startTimeParallel = System.currentTimeMillis();
-        wordsVocabulary = wordCounter.occurrencesCountInParallel(folder);
-        long resultTimeParallel = System.currentTimeMillis() - startTimeParallel;
-        Map<Integer, Integer> vocabularySimple;
-        startTimeSimple = System.currentTimeMillis();
-        vocabularySimple = wordCounterSimple.countOccurrencesOnSingleThread(folder);
-        long resultTimeSimple = System.currentTimeMillis() - startTimeSimple;
-        printWordLengthCounts(vocabularySimple);
-        System.out.println("\n");
-        printWordLengthCounts(wordsVocabulary);
-        System.out.println("Time Parallel: " + resultTimeParallel + " ms" +
-                "\nTime Base alg:" + resultTimeSimple + "ms"
-        +"\nSpeed up:" + (double)resultTimeSimple/resultTimeParallel);
+class Main {
+    public static final int NACCOUNTS = 10;
+    public static final int INITIAL_BALANCE = 10000;
 
-    }
+    public static void main(String[] args) {
 
-    public static void printWordLengthCounts(Map<Integer, Integer> wordLengthCounts) {
-        System.out.println("Word Length Counts:");
-        for (Map.Entry<Integer, Integer> entry : wordLengthCounts.entrySet()) {
-            System.out.println(entry.getKey() + " characters: " + entry.getValue() + " words");
+
+        long startTime1 = System.currentTimeMillis();
+
+        BankSynch b1 = new BankSynch(NACCOUNTS, INITIAL_BALANCE);
+        TransferThreadSynch[] threads = new TransferThreadSynch[NACCOUNTS];
+
+        for (int i = 0; i < NACCOUNTS; i++) {
+            TransferThreadSynch t = new TransferThreadSynch(b1, i, INITIAL_BALANCE);
+            t.setPriority(Thread.NORM_PRIORITY + i % 2);
+            t.start();
+            threads[i] = t;
         }
+
+        for (TransferThreadSynch thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        long elapsedTime1 = System.currentTimeMillis() - startTime1;
+
+        System.out.println("\n================================\n");
+
+        long startTime2 = System.currentTimeMillis();
+
+        BankSynch b2 = new BankSynch(NACCOUNTS, INITIAL_BALANCE);
+        ForkJoinPool pool = new ForkJoinPool(NACCOUNTS);
+        for (int i = 0; i < NACCOUNTS; i++) {
+            TransferTask task = new TransferTask(b2, i, INITIAL_BALANCE);
+            pool.execute(task);
+        }
+        pool.shutdown();
+
+        while (!pool.isTerminated()) {
+        }
+
+        long elapsedTime2 = System.currentTimeMillis() - startTime2;
+
+        System.out.println("Elapsed time for the base thread approach: " + elapsedTime1 + " ms");
+        System.out.println("Elapsed time for the fork join approach: " + elapsedTime2 + " ms");
+        System.out.println("speed up: " + (double)elapsedTime1 / elapsedTime2 + " ms");
     }
 }

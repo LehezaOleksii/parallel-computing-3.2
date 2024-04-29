@@ -6,7 +6,7 @@ public class TransferThreadSynch extends Thread {
     private BankSynch bank;
     private int fromAccount;
     private int maxAmount;
-    private static final int REPS = 1000;
+    private static final int REPS = 100000;
 
     public TransferThreadSynch(BankSynch b, int from, int max) {
         bank = b;
@@ -16,15 +16,13 @@ public class TransferThreadSynch extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            for (int i = 0; i < REPS; i++) {
-                int toAccount = (int) (bank.accountsNumber() * Math.random());
-                int amount = (int) (maxAmount * Math.random() / REPS);
+        for (int i = 0; i < REPS; i++) {
+            int toAccount = (int) (bank.accountsNumber() * Math.random());
+            int amount = (int) (maxAmount * Math.random() / REPS);
 //                bank.transferAsync(fromAccount, toAccount, amount);
-                bank.transferSyncMethod(fromAccount, toAccount, amount);
+            bank.transferSyncMethod(fromAccount, toAccount, amount);
 //                bank.transferSyncWaitNotify(fromAccount, toAccount, amount);
 //                bank.transferSyncLock(fromAccount, toAccount, amount);
-            }
         }
     }
 }
