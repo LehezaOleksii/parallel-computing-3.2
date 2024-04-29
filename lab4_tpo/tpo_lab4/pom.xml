@@ -10,7 +10,11 @@
   <name>tpo_lab4</name>
   <url>http://maven.apache.org</url>
   <modules>
-    <module>taskk1</module>
+    <module>task1</module>
+    <module>task2</module>
+    <module>task3</module>
+    <module>task4</module>
+      <module>task2</module>
   </modules>
 
   <properties>
