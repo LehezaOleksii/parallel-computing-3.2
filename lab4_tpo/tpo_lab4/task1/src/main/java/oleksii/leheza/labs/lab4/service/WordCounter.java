@@ -13,12 +13,14 @@ public class WordCounter {
 
     private final Map<Integer, Integer> vocabularyOfWordsCount = new ConcurrentHashMap<>();
 
+    private final String regex = "(\\s|\\p{Punct})+";
+
     public static String[] wordsIn(String line) {
-        return line.trim().split("(\\s|\\p{Punct})+");
+        return line.split("(\\s|\\p{Punct})+");
     }
 
-    public  Map<Integer, Integer> occurrencesCountInParallel(Folder folder,
-                                           String searchedWord) {
+    public Map<Integer, Integer> occurrencesCountInParallel(Folder folder,
+                                                            String searchedWord) {
         return forkJoinPool.invoke(new FolderSearchTask(folder, vocabularyOfWordsCount));
     }
 
@@ -26,17 +28,25 @@ public class WordCounter {
         return forkJoinPool.invoke(new FolderSearchTask(folder, vocabularyOfWordsCount));
     }
 
-//    public Long countOccurrencesOnSingleThread(Folder folder,
-//                                               String searchedWord) {
-//        long count = 0;
-//        for (Folder subFolder : folder.getSubFolders()) {
-//            count = count + countOccurrencesOnSingleThread(
-//                    subFolder, searchedWord);
-//        }
-//        for (Document document : folder.getDocuments()) {
-//            count = count + occurrencesCountInParallel(folder,
-//                    searchedWord);
-//        }
-//        return count;
-//    }
+    public Map<Integer, Integer> countOccurrencesOnSingleThread(Folder folder) {
+        processFolder(folder);
+        return vocabularyOfWordsCount;
+    }
+
+    private void processFolder(Folder folder) {
+        for (Document document : folder.getDocuments()) {
+            processDocument(document);
+        }
+        for (Folder subFolder : folder.getSubFolders()) {
+            processFolder(subFolder);
+        }
+    }
+
+    private void processDocument(Document document) {
+        for (String line : document.getLines()) {
+            for (String word : line.split(regex)) {
+                vocabularyOfWordsCount.merge(word.length(), 1, Integer::sum);
+            }
+        }
+    }
 }
