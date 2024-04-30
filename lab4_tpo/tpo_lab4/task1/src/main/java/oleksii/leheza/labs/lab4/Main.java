@@ -29,6 +29,27 @@ public class Main {
                 "\nTime Base alg:" + resultTimeSimple + "ms"
         +"\nSpeed up:" + (double)resultTimeSimple/resultTimeParallel);
 
+System.out.println("================Analyze================");
+        int totalWords = 0;
+        int sumOfLengths = 0;
+        for (Map.Entry<Integer, Integer> entry : vocabularySimple.entrySet()) {
+            totalWords += entry.getValue();
+            sumOfLengths += entry.getKey() * entry.getValue();
+        }
+
+        double averageLength = (double) sumOfLengths / totalWords;
+        double sumOfSquaredDifferences = 0;
+
+        for (Map.Entry<Integer, Integer> entry : vocabularySimple.entrySet()) {
+            int length = entry.getKey();
+            int wordsCount = entry.getValue();
+            sumOfSquaredDifferences += wordsCount * Math.pow(length - averageLength, 2);
+        }
+
+        double variance = sumOfSquaredDifferences / totalWords;
+        double standardDeviation = Math.sqrt(variance);
+        System.out.println("Average word length: " + averageLength);
+        System.out.println("Standard deviation: " + standardDeviation);
     }
 
     public static void printWordLengthCounts(Map<Integer, Integer> wordLengthCounts) {
