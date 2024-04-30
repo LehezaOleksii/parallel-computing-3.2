@@ -658,3 +658,86 @@ an array of StackTraceElement, each represents one stack frame.
 Throws:
 SecurityException - if a security manager exists and its checkPermission method doesn't allow getting the stack trace of thread.
 Since:
+1.5
+See Also:
+SecurityManager.checkPermission(java.security.Permission), RuntimePermission, Throwable.getStackTrace()
+getAllStackTraces
+public static Map<Thread,StackTraceElement[]> getAllStackTraces()
+Returns a map of stack traces for all live threads. The map keys are threads and each map value is an array of StackTraceElement that represents the stack dump of the corresponding Thread. The returned stack traces are in the format specified for the getStackTrace method.
+The threads may be executing while this method is called. The stack trace of each thread only represents a snapshot and each stack trace may be obtained at different time. A zero-length array will be returned in the map value if the virtual machine has no stack trace information about a thread.
+
+If there is a security manager, then the security manager's checkPermission method is called with a RuntimePermission("getStackTrace") permission as well as RuntimePermission("modifyThreadGroup") permission to see if it is ok to get the stack trace of all threads.
+
+Returns:
+a Map from Thread to an array of StackTraceElement that represents the stack trace of the corresponding thread.
+Throws:
+SecurityException - if a security manager exists and its checkPermission method doesn't allow getting the stack trace of thread.
+Since:
+1.5
+See Also:
+getStackTrace(), SecurityManager.checkPermission(java.security.Permission), RuntimePermission, Throwable.getStackTrace()
+getId
+public long getId()
+Returns the identifier of this Thread. The thread ID is a positive long number generated when this thread was created. The thread ID is unique and remains unchanged during its lifetime. When a thread is terminated, this thread ID may be reused.
+Returns:
+this thread's ID.
+Since:
+1.5
+getState
+public Thread.State getState()
+Returns the state of this thread. This method is designed for use in monitoring of the system state, not for synchronization control.
+Returns:
+this thread's state.
+Since:
+1.5
+setDefaultUncaughtExceptionHandler
+public static void setDefaultUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh)
+Set the default handler invoked when a thread abruptly terminates due to an uncaught exception, and no other handler has been defined for that thread.
+Uncaught exception handling is controlled first by the thread, then by the thread's ThreadGroup object and finally by the default uncaught exception handler. If the thread does not have an explicit uncaught exception handler set, and the thread's thread group (including parent thread groups) does not specialize its uncaughtException method, then the default handler's uncaughtException method will be invoked.
+
+By setting the default uncaught exception handler, an application can change the way in which uncaught exceptions are handled (such as logging to a specific device, or file) for those threads that would already accept whatever "default" behavior the system provided.
+
+Note that the default uncaught exception handler should not usually defer to the thread's ThreadGroup object, as that could cause infinite recursion.
+
+Parameters:
+eh - the object to use as the default uncaught exception handler. If null then there is no default handler.
+Throws:
+SecurityException - if a security manager is present and it denies RuntimePermission ("setDefaultUncaughtExceptionHandler")
+Since:
+1.5
+See Also:
+setUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler), getUncaughtExceptionHandler(), ThreadGroup.uncaughtException(java.lang.Thread, java.lang.Throwable)
+getDefaultUncaughtExceptionHandler
+public static Thread.UncaughtExceptionHandler getDefaultUncaughtExceptionHandler()
+Returns the default handler invoked when a thread abruptly terminates due to an uncaught exception. If the returned value is null, there is no default.
+Returns:
+the default uncaught exception handler for all threads
+Since:
+1.5
+See Also:
+setDefaultUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler)
+getUncaughtExceptionHandler
+public Thread.UncaughtExceptionHandler getUncaughtExceptionHandler()
+Returns the handler invoked when this thread abruptly terminates due to an uncaught exception. If this thread has not had an uncaught exception handler explicitly set then this thread's ThreadGroup object is returned, unless this thread has terminated, in which case null is returned.
+Returns:
+the uncaught exception handler for this thread
+Since:
+1.5
+setUncaughtExceptionHandler
+public void setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh)
+Set the handler invoked when this thread abruptly terminates due to an uncaught exception.
+A thread can take full control of how it responds to uncaught exceptions by having its uncaught exception handler explicitly set. If no such handler is set then the thread's ThreadGroup object acts as its handler.
+
+Parameters:
+eh - the object to use as this thread's uncaught exception handler. If null then this thread has no explicit handler.
+Throws:
+SecurityException - if the current thread is not allowed to modify this thread.
+Since:
+1.5
+See Also:
+setDefaultUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler), ThreadGroup.uncaughtException(java.lang.Thread, java.lang.Throwable)
+SKIP NAVIGATION LINKSOVERVIEWPACKAGECLASSUSETREEDEPRECATEDINDEXHELPJava™ Platform
+Standard Ed. 8PREV CLASSNEXT CLASSFRAMESNO FRAMESALL CLASSESSUMMARY: NESTED | FIELD | CONSTR | METHODDETAIL: FIELD | CONSTR | METHOD
+Submit a bug or feature
+For further API reference and developer documentation, see Java SE Documentation. That documentation contains more detailed, developer-targeted descriptions, with conceptual overviews, definitions of terms, workarounds, and working code examples.
+Copyright © 1993, 2024, Oracle and/or its affiliates. All rights reserved. Use is subject to license terms. Also see the documentation redistribution policy. Modify Настройки cookie. Modify Ad Choices.

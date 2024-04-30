@@ -1,122 +1,3 @@
-SKIP NAVIGATION LINKSOVERVIEWPACKAGECLASSUSETREEDEPRECATEDINDEXHELPJava™ Platform
-Standard Ed. 8PREV CLASSNEXT CLASSFRAMESNO FRAMESALL CLASSESSUMMARY: NESTED | FIELD | CONSTR | METHODDETAIL: FIELD | CONSTR | METHOD
-compact1, compact2, compact3
-java.lang
-Class Thread
-java.lang.Object
-java.lang.Thread
-All Implemented Interfaces:
-Runnable
-Direct Known Subclasses:
-ForkJoinWorkerThread
-
-public class Thread
-extends Object
-implements Runnable
-A thread is a thread of execution in a program. The Java Virtual Machine allows an application to have multiple threads of execution running concurrently.
-Every thread has a priority. Threads with higher priority are executed in preference to threads with lower priority. Each thread may or may not also be marked as a daemon. When code running in some thread creates a new Thread object, the new thread has its priority initially set equal to the priority of the creating thread, and is a daemon thread if and only if the creating thread is a daemon.
-
-When a Java Virtual Machine starts up, there is usually a single non-daemon thread (which typically calls the method named main of some designated class). The Java Virtual Machine continues to execute threads until either of the following occurs:
-
-The exit method of class Runtime has been called and the security manager has permitted the exit operation to take place.
-All threads that are not daemon threads have died, either by returning from the call to the run method or by throwing an exception that propagates beyond the run method.
-There are two ways to create a new thread of execution. One is to declare a class to be a subclass of Thread. This subclass should override the run method of class Thread. An instance of the subclass can then be allocated and started. For example, a thread that computes primes larger than a stated value could be written as follows:
-
-     class PrimeThread extends Thread {
-         long minPrime;
-         PrimeThread(long minPrime) {
-             this.minPrime = minPrime;
-         }
-
-         public void run() {
-             // compute primes larger than minPrime
-              . . .
-         }
-     }
- 
-The following code would then create a thread and start it running:
-
-     PrimeThread p = new PrimeThread(143);
-     p.start();
- 
-The other way to create a thread is to declare a class that implements the Runnable interface. That class then implements the run method. An instance of the class can then be allocated, passed as an argument when creating Thread, and started. The same example in this other style looks like the following:
-
-     class PrimeRun implements Runnable {
-         long minPrime;
-         PrimeRun(long minPrime) {
-             this.minPrime = minPrime;
-         }
-
-         public void run() {
-             // compute primes larger than minPrime
-              . . .
-         }
-     }
- 
-The following code would then create a thread and start it running:
-
-     PrimeRun p = new PrimeRun(143);
-     new Thread(p).start();
- 
-Every thread has a name for identification purposes. More than one thread may have the same name. If a name is not specified when a thread is created, a new name is generated for it.
-
-Unless otherwise noted, passing a null argument to a constructor or method in this class will cause a NullPointerException to be thrown.
-
-Since:
-JDK1.0
-See Also:
-Runnable, Runtime.exit(int), run(), stop()
-Nested Class Summary
-Nested Classes
-Modifier and Type	Class and Description
-static class 	Thread.State
-A thread state.
-static interface 	Thread.UncaughtExceptionHandler
-Interface for handlers invoked when a Thread abruptly terminates due to an uncaught exception.
-Field Summary
-Fields
-Modifier and Type	Field and Description
-static int	MAX_PRIORITY
-The maximum priority that a thread can have.
-static int	MIN_PRIORITY
-The minimum priority that a thread can have.
-static int	NORM_PRIORITY
-The default priority that is assigned to a thread.
-Constructor Summary
-Constructors
-Constructor and Description
-Thread()
-Allocates a new Thread object.
-Thread(Runnable target)
-Allocates a new Thread object.
-Thread(Runnable target, String name)
-Allocates a new Thread object.
-Thread(String name)
-Allocates a new Thread object.
-Thread(ThreadGroup group, Runnable target)
-Allocates a new Thread object.
-Thread(ThreadGroup group, Runnable target, String name)
-Allocates a new Thread object so that it has target as its run object, has the specified name as its name, and belongs to the thread group referred to by group.
-Thread(ThreadGroup group, Runnable target, String name, long stackSize)
-Allocates a new Thread object so that it has target as its run object, has the specified name as its name, and belongs to the thread group referred to by group, and has the specified stack size.
-Thread(ThreadGroup group, String name)
-Allocates a new Thread object.
-Method Summary
-All MethodsStatic MethodsInstance MethodsConcrete MethodsDeprecated Methods
-Modifier and Type	Method and Description
-static int	activeCount()
-Returns an estimate of the number of active threads in the current thread's thread group and its subgroups.
-void	checkAccess()
-Determines if the currently running thread has permission to modify this thread.
-protected Object	clone()
-Throws CloneNotSupportedException as a Thread can not be meaningfully cloned.
-int	countStackFrames()
-Deprecated. 
-The definition of this call depends on suspend(), which is deprecated. Further, the results of this call were never well-defined.
-static Thread	currentThread()
-Returns a reference to the currently executing thread object.
-void	destroy()
-Deprecated. 
 This method was originally designed to destroy this thread without any cleanup. Any monitors it held would have remained locked. However, the method was never implemented. If if were to be implemented, it would be deadlock-prone in much the manner of suspend(). If the target thread held a lock protecting a critical system resource when it was destroyed, no thread could ever access this resource again. If another thread ever attempted to lock this resource, deadlock would result. Such deadlocks typically manifest themselves as "frozen" processes. For more information, see Why are Thread.stop, Thread.suspend and Thread.resume Deprecated?.
 static void	dumpStack()
 Prints a stack trace of the current thread to the standard error stream.
@@ -658,3 +539,86 @@ an array of StackTraceElement, each represents one stack frame.
 Throws:
 SecurityException - if a security manager exists and its checkPermission method doesn't allow getting the stack trace of thread.
 Since:
+1.5
+See Also:
+SecurityManager.checkPermission(java.security.Permission), RuntimePermission, Throwable.getStackTrace()
+getAllStackTraces
+public static Map<Thread,StackTraceElement[]> getAllStackTraces()
+Returns a map of stack traces for all live threads. The map keys are threads and each map value is an array of StackTraceElement that represents the stack dump of the corresponding Thread. The returned stack traces are in the format specified for the getStackTrace method.
+The threads may be executing while this method is called. The stack trace of each thread only represents a snapshot and each stack trace may be obtained at different time. A zero-length array will be returned in the map value if the virtual machine has no stack trace information about a thread.
+
+If there is a security manager, then the security manager's checkPermission method is called with a RuntimePermission("getStackTrace") permission as well as RuntimePermission("modifyThreadGroup") permission to see if it is ok to get the stack trace of all threads.
+
+Returns:
+a Map from Thread to an array of StackTraceElement that represents the stack trace of the corresponding thread.
+Throws:
+SecurityException - if a security manager exists and its checkPermission method doesn't allow getting the stack trace of thread.
+Since:
+1.5
+See Also:
+getStackTrace(), SecurityManager.checkPermission(java.security.Permission), RuntimePermission, Throwable.getStackTrace()
+getId
+public long getId()
+Returns the identifier of this Thread. The thread ID is a positive long number generated when this thread was created. The thread ID is unique and remains unchanged during its lifetime. When a thread is terminated, this thread ID may be reused.
+Returns:
+this thread's ID.
+Since:
+1.5
+getState
+public Thread.State getState()
+Returns the state of this thread. This method is designed for use in monitoring of the system state, not for synchronization control.
+Returns:
+this thread's state.
+Since:
+1.5
+setDefaultUncaughtExceptionHandler
+public static void setDefaultUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh)
+Set the default handler invoked when a thread abruptly terminates due to an uncaught exception, and no other handler has been defined for that thread.
+Uncaught exception handling is controlled first by the thread, then by the thread's ThreadGroup object and finally by the default uncaught exception handler. If the thread does not have an explicit uncaught exception handler set, and the thread's thread group (including parent thread groups) does not specialize its uncaughtException method, then the default handler's uncaughtException method will be invoked.
+
+By setting the default uncaught exception handler, an application can change the way in which uncaught exceptions are handled (such as logging to a specific device, or file) for those threads that would already accept whatever "default" behavior the system provided.
+
+Note that the default uncaught exception handler should not usually defer to the thread's ThreadGroup object, as that could cause infinite recursion.
+
+Parameters:
+eh - the object to use as the default uncaught exception handler. If null then there is no default handler.
+Throws:
+SecurityException - if a security manager is present and it denies RuntimePermission ("setDefaultUncaughtExceptionHandler")
+Since:
+1.5
+See Also:
+setUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler), getUncaughtExceptionHandler(), ThreadGroup.uncaughtException(java.lang.Thread, java.lang.Throwable)
+getDefaultUncaughtExceptionHandler
+public static Thread.UncaughtExceptionHandler getDefaultUncaughtExceptionHandler()
+Returns the default handler invoked when a thread abruptly terminates due to an uncaught exception. If the returned value is null, there is no default.
+Returns:
+the default uncaught exception handler for all threads
+Since:
+1.5
+See Also:
+setDefaultUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler)
+getUncaughtExceptionHandler
+public Thread.UncaughtExceptionHandler getUncaughtExceptionHandler()
+Returns the handler invoked when this thread abruptly terminates due to an uncaught exception. If this thread has not had an uncaught exception handler explicitly set then this thread's ThreadGroup object is returned, unless this thread has terminated, in which case null is returned.
+Returns:
+the uncaught exception handler for this thread
+Since:
+1.5
+setUncaughtExceptionHandler
+public void setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh)
+Set the handler invoked when this thread abruptly terminates due to an uncaught exception.
+A thread can take full control of how it responds to uncaught exceptions by having its uncaught exception handler explicitly set. If no such handler is set then the thread's ThreadGroup object acts as its handler.
+
+Parameters:
+eh - the object to use as this thread's uncaught exception handler. If null then this thread has no explicit handler.
+Throws:
+SecurityException - if the current thread is not allowed to modify this thread.
+Since:
+1.5
+See Also:
+setDefaultUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler), ThreadGroup.uncaughtException(java.lang.Thread, java.lang.Throwable)
+SKIP NAVIGATION LINKSOVERVIEWPACKAGECLASSUSETREEDEPRECATEDINDEXHELPJava™ Platform
+Standard Ed. 8PREV CLASSNEXT CLASSFRAMESNO FRAMESALL CLASSESSUMMARY: NESTED | FIELD | CONSTR | METHODDETAIL: FIELD | CONSTR | METHOD
+Submit a bug or feature
+For further API reference and developer documentation, see Java SE Documentation. That documentation contains more detailed, developer-targeted descriptions, with conceptual overviews, definitions of terms, workarounds, and working code examples.
+Copyright © 1993, 2024, Oracle and/or its affiliates. All rights reserved. Use is subject to license terms. Also see the documentation redistribution policy. Modify Настройки cookie. Modify Ad Choices.

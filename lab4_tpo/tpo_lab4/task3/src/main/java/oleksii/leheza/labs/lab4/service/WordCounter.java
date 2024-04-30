@@ -3,18 +3,16 @@ package oleksii.leheza.labs.lab4.service;
 import oleksii.leheza.labs.lab4.entities.Document;
 import oleksii.leheza.labs.lab4.entities.Folder;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
 
-import static java.util.Collections.synchronizedSet;
-
 public class WordCounter {
-    private final ForkJoinPool forkJoinPool =
-            new ForkJoinPool();
+    private final ForkJoinPool forkJoinPool = new ForkJoinPool();
 
-    private final Set<String> vocabularyOfWordsCount = synchronizedSet(new HashSet<>());
+    private final Set<String> vocabularyOfWordsCount = Collections.synchronizedSet(new HashSet<String>());
 
     private final String regex = "(\\s|\\p{Punct})+";
 

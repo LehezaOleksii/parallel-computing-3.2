@@ -30,14 +30,6 @@ public class Folder {
         return new Folder(subFolders, documents);
     }
 
-    public List<Document> getAllDocuments() {
-        List<Document> allDocuments = new LinkedList<>(documents);
-        for (Folder subFolder : subFolders) {
-            allDocuments.addAll(subFolder.getAllDocuments());
-        }
-        return allDocuments;
-    }
-
     public List<Folder> getSubFolders() {
         return subFolders;
     }

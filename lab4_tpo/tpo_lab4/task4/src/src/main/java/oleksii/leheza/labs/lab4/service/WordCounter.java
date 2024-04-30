@@ -4,7 +4,6 @@ import oleksii.leheza.labs.lab4.entities.Document;
 import oleksii.leheza.labs.lab4.entities.Folder;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
 
@@ -12,25 +11,24 @@ public class WordCounter {
     private final ForkJoinPool forkJoinPool =
             new ForkJoinPool();
 
-    private final Set<String> keyWords;
-
-    private final Map<String, Integer> vocabularyOfWordsCount = new ConcurrentHashMap<>();
+    private final Map<Integer, Integer> vocabularyOfWordsCount = new ConcurrentHashMap<>();
 
     private final String regex = "(\\s|\\p{Punct})+";
-
-    public WordCounter(Set<String> keyWords) {
-        this.keyWords = keyWords;
-    }
 
     public static String[] wordsIn(String line) {
         return line.split("(\\s|\\p{Punct})+");
     }
 
-    public Map<String, Integer> occurrencesCountInParallel(Folder folder) {
-        return forkJoinPool.invoke(new FolderSearchTask(folder, vocabularyOfWordsCount, keyWords));
+    public Map<Integer, Integer> occurrencesCountInParallel(Folder folder,
+                                                            String searchedWord) {
+        return forkJoinPool.invoke(new FolderSearchTask(folder, vocabularyOfWordsCount));
     }
 
-    public Map<String, Integer> countOccurrencesOnSingleThread(Folder folder) {
+    public Map<Integer, Integer> occurrencesCountInParallel(Folder folder) {
+        return forkJoinPool.invoke(new FolderSearchTask(folder, vocabularyOfWordsCount));
+    }
+
+    public Map<Integer, Integer> countOccurrencesOnSingleThread(Folder folder) {
         processFolder(folder);
         return vocabularyOfWordsCount;
     }
@@ -46,10 +44,8 @@ public class WordCounter {
 
     private void processDocument(Document document) {
         for (String line : document.getLines()) {
-            for (String word : wordsIn(line)) {
-                if (keyWords.contains(word.toLowerCase())) {
-                    vocabularyOfWordsCount.merge(word.toLowerCase(), 1, Integer::sum);
-                }
+            for (String word : line.split(regex)) {
+                vocabularyOfWordsCount.merge(word.length(), 1, Integer::sum);
             }
         }
     }
