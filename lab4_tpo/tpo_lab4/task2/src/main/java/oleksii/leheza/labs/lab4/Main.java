@@ -5,12 +5,13 @@ import oleksii.leheza.labs.lab4.bank.synch.TransferThreadSynch;
 import oleksii.leheza.labs.lab4.fork.TransferTask;
 
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 
 class Main {
     public static final int NACCOUNTS = 10;
     public static final int INITIAL_BALANCE = 10000;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
 
         long startTime1 = System.currentTimeMillis();
@@ -20,7 +21,6 @@ class Main {
 
         for (int i = 0; i < NACCOUNTS; i++) {
             TransferThreadSynch t = new TransferThreadSynch(b1, i, INITIAL_BALANCE);
-            t.setPriority(Thread.NORM_PRIORITY + i % 2);
             t.start();
             threads[i] = t;
         }
@@ -45,9 +45,10 @@ class Main {
             TransferTask task = new TransferTask(b2, i, INITIAL_BALANCE);
             pool.execute(task);
         }
-        pool.shutdown();
 
+        pool.shutdown();
         while (!pool.isTerminated()) {
+            pool.awaitTermination(20, TimeUnit.SECONDS);
         }
 
         long elapsedTime2 = System.currentTimeMillis() - startTime2;

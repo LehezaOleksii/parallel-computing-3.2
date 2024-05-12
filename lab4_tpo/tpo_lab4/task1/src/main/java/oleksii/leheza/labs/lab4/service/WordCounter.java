@@ -19,11 +19,6 @@ public class WordCounter {
         return line.split("(\\s|\\p{Punct})+");
     }
 
-    public Map<Integer, Integer> occurrencesCountInParallel(Folder folder,
-                                                            String searchedWord) {
-        return forkJoinPool.invoke(new FolderSearchTask(folder, vocabularyOfWordsCount));
-    }
-
     public Map<Integer, Integer> occurrencesCountInParallel(Folder folder) {
         return forkJoinPool.invoke(new FolderSearchTask(folder, vocabularyOfWordsCount));
     }
