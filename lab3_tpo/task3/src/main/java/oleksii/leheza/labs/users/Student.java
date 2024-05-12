@@ -36,8 +36,8 @@ public class Student {
                     } else {
                         markObj = new Mark(subject, date, 100 - getTotalMark(subject));
                     }
-                }
                 marks.get(subject).put(date, markObj);
+                }
             } else {
                 System.err.println("Date is not available");
             }
