@@ -1,13 +1,13 @@
-package oleksii.leheza.labs;
+package oleksii.leheza.labs.task1;
 
 import mpi.MPI;
 
 import java.util.Random;
 
 public class mpi_mm {
-    static final int NRA = 10; // number of rows in matrix A
-    static final int NCA = 10; // number of columns in matrix A
-    static final int NCB = 10; // number of columns in matrix B
+    static final int NRA = 500; // number of rows in matrix A
+    static final int NCA = 500; // number of columns in matrix A
+    static final int NCB = 500; // number of columns in matrix B
     static final int MASTER = 0; // taskid of first task
     static final int FROM_MASTER = 1; // setting a message type
     static final int FROM_WORKER = 2; // setting a message type
@@ -60,15 +60,15 @@ public class mpi_mm {
             }
 
             // Print results
-            System.out.println("****");
-            System.out.println("Result Matrix:");
-            for (int i = 0; i < NRA; i++) {
-                for (int j = 0; j < NCB; j++)
-                    System.out.print(String.format("%6.2f ", c[i * NCB + j]));
-                System.out.println();
-            }
-            System.out.println("********");
-            System.out.println("Done.");
+//            System.out.println("****");
+//            System.out.println("Result Matrix:");
+//            for (int i = 0; i < NRA; i++) {
+//                for (int j = 0; j < NCB; j++)
+//                    System.out.print(String.format("%6.2f ", c[i * NCB + j]));
+//                System.out.println();
+//            }
+//            System.out.println("********");
+//            System.out.println("Done.");
         } else {
             int[] offset = new int[1];
             int[] rows = new int[1];
