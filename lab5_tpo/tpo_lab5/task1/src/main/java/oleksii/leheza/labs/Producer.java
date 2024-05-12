@@ -1,11 +1,11 @@
 package oleksii.leheza.labs;
 
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Producer implements Runnable {
-    private final Queue<ClientTask> queue = new ConcurrentLinkedQueue<>();
+    private final Queue<ClientTask> queue = new LinkedBlockingQueue<>();
     private final int maxQueueLength = 100;
     private int taskLoss = 0;
 

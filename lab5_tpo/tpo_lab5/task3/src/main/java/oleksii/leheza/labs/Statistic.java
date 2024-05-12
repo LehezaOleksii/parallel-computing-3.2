@@ -15,14 +15,11 @@ public class Statistic implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!producer.isTasksEnd()) {
             System.out.println("Statistic\nQueue size:" + producer.getQueueSize() +
                     "\nLost tasks:" + producer.getTaskLoss() +
                     "\nCompleted tasks:" + completedTasks.get()+
                     "\n----------------------------------------------------");
-            if (producer.isTasksEnd()) {
-                break;
-            }
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
