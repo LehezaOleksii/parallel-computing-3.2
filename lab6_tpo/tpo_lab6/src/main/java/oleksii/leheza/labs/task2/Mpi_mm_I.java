@@ -25,7 +25,6 @@ public class Mpi_mm_I {
         }
 
         if (taskid == MASTER) {
-            long startUnblockingMultiplication = System.currentTimeMillis();
             // Matrix initialization
             double[] a = new double[NRA * NCA];
             double[] b = new double[NCA * NCB];
@@ -34,6 +33,7 @@ public class Mpi_mm_I {
                 a[i] = 10;
             for (int i = 0; i < NCA * NCB; i++)
                 b[i] = 10;
+            long startUnblockingMultiplication = System.currentTimeMillis();
 
             int averow = NRA / numworkers;
             int extra = NRA % numworkers;
