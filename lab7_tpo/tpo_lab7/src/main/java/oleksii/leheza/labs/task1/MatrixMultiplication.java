@@ -16,8 +16,6 @@ public class MatrixMultiplication {
 
         int[] counts = new int[size];
         int[] displacements = new int[size]; // зміщення для кожного процесу
-        int blockSize = rows / size;
-        int remainder = rows % size;
 
         int[][] A = new int[rows][cols];
         int[][] B = new int[cols][rows];
@@ -33,6 +31,9 @@ public class MatrixMultiplication {
                 }
             }
         }
+
+        int blockSize = rows / size;
+        int remainder = rows % size;
 
         MPI.COMM_WORLD.Bcast(B, 0, cols, MPI.OBJECT, 0);
 
@@ -60,7 +61,7 @@ public class MatrixMultiplication {
 
         if (rank == 0) {
             long endTime = System.currentTimeMillis();
-                        System.out.println("result:");
+            System.out.println("result:");
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < rows; j++) {
                     System.out.print(result[i][j] + " ");
