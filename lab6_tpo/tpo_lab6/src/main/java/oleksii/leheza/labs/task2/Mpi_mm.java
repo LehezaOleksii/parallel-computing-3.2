@@ -1,16 +1,18 @@
-package oleksii.leheza.labs.task1;
+package oleksii.leheza.labs.task2;
 
 import mpi.MPI;
 
 import java.util.Random;
 
-public class mpi_mm {
-    static final int NRA = 500; // number of rows in matrix A
-    static final int NCA = 500; // number of columns in matrix A
-    static final int NCB = 500; // number of columns in matrix B
+public class Mpi_mm {
+    private static int NRA = 1000; // number of rows in matrix A
+    private static int NCA = 1000; // number of columns in matrix A
+    private static int NCB = 1000; // number of columns in matrix B
     static final int MASTER = 0; // taskid of first task
     static final int FROM_MASTER = 1; // setting a message type
     static final int FROM_WORKER = 2; // setting a message type
+
+    public static double[] c;
 
     public static void main(String[] args) {
         MPI.Init(args);
@@ -25,23 +27,23 @@ public class mpi_mm {
         }
 
         if (taskid == MASTER) {
-            System.out.println("mpi_mm has started with " + numtasks + " tasks.");
+            long startUnblockingMultiplication = System.currentTimeMillis();
 
             // Matrix initialization
             double[] a = new double[NRA * NCA];
             double[] b = new double[NCA * NCB];
-            double[] c = new double[NRA * NCB];
+            c = new double[NRA * NCB];
             for (int i = 0; i < NRA * NCA; i++)
                 a[i] = new Random().nextInt();
             for (int i = 0; i < NCA * NCB; i++)
-                b[i] =  new Random().nextInt();
+                b[i] = new Random().nextInt();
 
             int averow = NRA / numworkers;
             int extra = NRA % numworkers;
             int offset = 0;
             for (int dest = 1; dest <= numworkers; dest++) {
                 int rows = (dest <= extra) ? averow + 1 : averow;
-                System.out.println("Sending " + rows + " rows to task " + dest + " offset= " + offset);
+//                System.out.println("Sending " + rows + " rows to task " + dest + " offset= " + offset);
                 MPI.COMM_WORLD.Send(new int[]{offset}, 0, 1, MPI.INT, dest, FROM_MASTER);
                 MPI.COMM_WORLD.Send(new int[]{rows}, 0, 1, MPI.INT, dest, FROM_MASTER);
                 MPI.COMM_WORLD.Send(a, offset * NCA, rows * NCA, MPI.DOUBLE, dest, FROM_MASTER);
@@ -56,7 +58,7 @@ public class mpi_mm {
                 MPI.COMM_WORLD.Recv(new int[]{sourceOffset}, 0, 1, MPI.INT, source, FROM_WORKER);
                 MPI.COMM_WORLD.Recv(new int[]{rows}, 0, 1, MPI.INT, source, FROM_WORKER);
                 MPI.COMM_WORLD.Recv(c, sourceOffset * NCB, rows * NCB, MPI.DOUBLE, source, FROM_WORKER);
-                System.out.println("Received results from task " + source);
+//                System.out.println("Received results from task " + source);
             }
 
             // Print results
@@ -69,6 +71,10 @@ public class mpi_mm {
 //            }
 //            System.out.println("********");
 //            System.out.println("Done.");
+
+            long endBlockingMultiplication = System.currentTimeMillis();
+            System.out.println("result time: " + (endBlockingMultiplication - startUnblockingMultiplication) + " ms");
+
         } else {
             int[] offset = new int[1];
             int[] rows = new int[1];
@@ -93,5 +99,10 @@ public class mpi_mm {
             MPI.COMM_WORLD.Send(c, 0, rows[0] * NCB, MPI.DOUBLE, MASTER, FROM_WORKER);
         }
         MPI.Finalize();
+    }
+
+    public double[] getResultMatrix(String[] args) {
+        main(args);
+        return c;
     }
 }
