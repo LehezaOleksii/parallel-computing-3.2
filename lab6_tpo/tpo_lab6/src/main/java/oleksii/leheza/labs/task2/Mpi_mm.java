@@ -5,9 +5,9 @@ import mpi.MPI;
 import java.util.Random;
 
 public class Mpi_mm {
-    private static int NRA = 1000; // number of rows in matrix A
-    private static int NCA = 1000; // number of columns in matrix A
-    private static int NCB = 1000; // number of columns in matrix B
+    private static final int NRA = 2000; // number of rows in matrix A
+    private static final int NCA = 2000; // number of columns in matrix A
+    private static final int NCB = 2000; // number of columns in matrix B
     static final int MASTER = 0; // taskid of first task
     static final int FROM_MASTER = 1; // setting a message type
     static final int FROM_WORKER = 2; // setting a message type
@@ -99,10 +99,5 @@ public class Mpi_mm {
             MPI.COMM_WORLD.Send(c, 0, rows[0] * NCB, MPI.DOUBLE, MASTER, FROM_WORKER);
         }
         MPI.Finalize();
-    }
-
-    public double[] getResultMatrix(String[] args) {
-        main(args);
-        return c;
     }
 }
