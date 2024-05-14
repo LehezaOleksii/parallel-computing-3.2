@@ -14,20 +14,14 @@ import java.util.stream.Collectors;
 
 public class WorkLecThread extends Thread {
 
-    private GradeBook gradeBook;
     private Teacher lector;
     private Subject subject;
-    private List<Class> classesObj;
-
     private List<Student> students;
 
-    public WorkLecThread(Teacher lector, GradeBook gradeBook, Subject subject, List<Class> classesObj) {
+
+    public WorkLecThread(Teacher lector, Subject subject) {
         this.lector = lector;
-        this.gradeBook = gradeBook;
         this.subject = subject;
-        students = classesObj.stream()
-                .flatMap(clazz -> clazz.getStudents().stream())
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -35,6 +29,9 @@ public class WorkLecThread extends Thread {
         int i = 0;
         Random random = new Random();
         List<Date> dates = subject.getLessons().stream().toList();
+        students= lector.getClasses()
+                .stream()
+                .flatMap(clazz -> clazz.getStudents().stream()).collect(Collectors.toList());
         while (i++ < 3000) {
             Student student = students.get(random.nextInt((students.size() - 1)));
             if (random.nextInt() % 2 == 0) {

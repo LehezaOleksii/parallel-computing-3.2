@@ -1,7 +1,5 @@
 package oleksii.leheza.labs.threads;
 
-import oleksii.leheza.labs.Class;
-import oleksii.leheza.labs.GradeBook;
 import oleksii.leheza.labs.Mark;
 import oleksii.leheza.labs.Subject;
 import oleksii.leheza.labs.users.Student;
@@ -10,21 +8,19 @@ import oleksii.leheza.labs.users.Teacher;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class WorkPracThread extends Thread {
 
-    private GradeBook gradeBook;
     private Teacher teacher;
     private Subject subject;
-    private Class classObj;
 
     private List<Student> students;
 
-    public WorkPracThread(Teacher teacher, GradeBook gradeBook, Subject subject, Class classObj) {
+    public WorkPracThread(Teacher teacher, Subject subject) {
         this.teacher = teacher;
-        this.gradeBook = gradeBook;
         this.subject = subject;
-        this.students = classObj.getStudents();
     }
 
     @Override
@@ -32,6 +28,9 @@ public class WorkPracThread extends Thread {
         int i = 0;
         Random random = new Random();
         List<Date> dates = subject.getLessons().stream().toList();
+          students= teacher.getClasses()
+                .stream()
+                .flatMap(clazz -> clazz.getStudents().stream()).collect(Collectors.toList());
         while (i++ < 1000) {
             Student student = students.get(random.nextInt((students.size())));
             if (random.nextInt() % 2 == 0) {

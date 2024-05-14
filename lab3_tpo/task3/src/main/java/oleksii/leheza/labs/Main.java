@@ -11,46 +11,44 @@ import oleksii.leheza.labs.users.Teacher;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
 
     public static void main(String[] args) {
-        Random random = new Random();
         List<Teacher> teachers = new ArrayList<>();
-        int practicesTeacherNumber = 3;
-        int groupsNumber = 3;
-        int studentsNumber = 90;
         Faker faker = new Faker();
-        Teacher lecturer = new Teacher(TeacherRole.LECTURER_ROLE, "lec1");
-        lecturer.setName(faker.name().fullName());
-        teachers.add(lecturer);
+        List<Teacher> lecturers = new ArrayList<>();
+
 
         Group group1 = new Group("IP", 13);
         Group group2 = new Group("IP", 14);
         Group group3 = new Group("IP", 15);
 
+        List<Teacher> practitioners1 = new ArrayList<>();
+        List<Teacher> practitioners2 = new ArrayList<>();
+        List<Teacher> practitioners3 = new ArrayList<>();
         List<Student> students1 = new ArrayList<>();
         List<Student> students2 = new ArrayList<>();
         List<Student> students3 = new ArrayList<>();
 
-        Teacher practitioner1 = new Practitioner(TeacherRole.PRACTICER_ROLE, group1, "pr1");
-        Teacher practitioner2 = new Practitioner(TeacherRole.PRACTICER_ROLE, group2, "pr2");
-        Teacher practitioner3 = new Practitioner(TeacherRole.PRACTICER_ROLE, group3, "pr3");
-
-        List<Teacher> lecturers = new ArrayList<>();
-        lecturers.add(lecturer);
-
-        List<Teacher> practitioners1 = new ArrayList<>();
-        practitioners1.add(practitioner1);
-        List<Teacher> practitioners2 = new ArrayList<>();
-        practitioners2.add(practitioner2);
-        List<Teacher> practitioners3 = new ArrayList<>();
-        practitioners3.add(practitioner3);
-
         Class class1 = new Class(students1, lecturers, practitioners1);
         Class class2 = new Class(students2, lecturers, practitioners2);
         Class class3 = new Class(students3, lecturers, practitioners3);
+
+        Teacher practitioner1 = new Practitioner(TeacherRole.PRACTICER_ROLE, class1, "pr1");
+        practitioners1.add(practitioner1);
+        practitioners2 = new ArrayList<>();
+        Teacher practitioner2 = new Practitioner(TeacherRole.PRACTICER_ROLE, class2, "pr2");
+        practitioners2.add(practitioner2);
+        practitioners3 = new ArrayList<>();
+        Teacher practitioner3 = new Practitioner(TeacherRole.PRACTICER_ROLE, class3, "pr3");
+        practitioners3.add(practitioner3);
+        Teacher lecturer = new Teacher(TeacherRole.LECTURER_ROLE, class1, "lec1");
+        lecturer.assignClass(class2);
+        lecturer.assignClass(class3);
+        lecturer.setName(faker.name().fullName());
+        teachers.add(lecturer);
+        lecturers.add(lecturer);
 
 
         GradeBook gradeBook = new GradeBook();
@@ -80,18 +78,21 @@ public class Main {
             Student student = new Student(faker.name().fullName(), group1);
             student.assignStudentToSubject(subject);
             class1.addStudent(student);
+            student.assignStudentToClass(class1);
         }
         System.out.println(class1);
         for (int i = 0; i < 30; i++) {
             Student student = new Student(faker.name().fullName(), group2);
             student.assignStudentToSubject(subject);
             class2.addStudent(student);
+            student.assignStudentToClass(class2);
         }
         System.out.println(class2);
         for (int i = 0; i < 30; i++) {
             Student student = new Student(faker.name().fullName(), group3);
             student.assignStudentToSubject(subject);
             class3.addStudent(student);
+            student.assignStudentToClass(class3);
         }
         System.out.println(class3);
 
@@ -101,10 +102,10 @@ public class Main {
         classes.add(class3);
 
         List<Thread> threads = new ArrayList<>();
-        threads.add(new WorkLecThread(lecturer, gradeBook, subject, classes));
-        threads.add(new WorkPracThread(practitioner1, gradeBook, subject, class1));
-        threads.add(new WorkPracThread(practitioner2, gradeBook, subject, class2));
-        threads.add(new WorkPracThread(practitioner3, gradeBook, subject, class3));
+        threads.add(new WorkLecThread(lecturer, subject));
+        threads.add(new WorkPracThread(practitioner1, subject));
+        threads.add(new WorkPracThread(practitioner2, subject));
+        threads.add(new WorkPracThread(practitioner3, subject));
 
         for (Thread thread : threads) {
             thread.run();

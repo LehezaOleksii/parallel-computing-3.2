@@ -2,14 +2,12 @@ package oleksii.leheza.labs.users;
 
 import lombok.Getter;
 import lombok.ToString;
+import oleksii.leheza.labs.Class;
 import oleksii.leheza.labs.Group;
 import oleksii.leheza.labs.Mark;
 import oleksii.leheza.labs.Subject;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @ToString
@@ -18,11 +16,14 @@ public class Student {
     private String name;
     private Group group;
     private final Map<Subject, Map<Date, Mark>> marks;
+    private Set<Class> classes;
+
 
     public Student(String name, Group group) {
         this.name = name;
         this.group = group;
         marks = new HashMap<>();
+        classes = new HashSet<>();
     }
 
     public void setMark(Subject subject, Date date, int mark) {
@@ -36,7 +37,7 @@ public class Student {
                     } else {
                         markObj = new Mark(subject, date, 100 - getTotalMark(subject));
                     }
-                marks.get(subject).put(date, markObj);
+                    marks.get(subject).put(date, markObj);
                 }
             } else {
                 System.err.println("Date is not available");
@@ -80,5 +81,9 @@ public class Student {
 
     private int getTotalMark(Subject subject) {
         return marks.get(subject).values().stream().mapToInt(Mark::getMark).sum();
+    }
+
+    public void assignStudentToClass(Class clas) {
+        classes.add(clas);
     }
 }
