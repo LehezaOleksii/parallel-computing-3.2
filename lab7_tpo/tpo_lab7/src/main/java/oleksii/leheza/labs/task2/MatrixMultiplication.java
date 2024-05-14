@@ -1,12 +1,12 @@
-package oleksii.leheza.labs.task1;
+package oleksii.leheza.labs.task2;
 
 import mpi.MPI;
 import mpi.MPIException;
 
 public class MatrixMultiplication {
 
-    static int rows = 2000;
-    static int cols = 2000;
+    static int rows = 1998;
+    static int cols = 1998;
 
     public static void main(String[] args) throws MPIException {
 
@@ -25,8 +25,8 @@ public class MatrixMultiplication {
             int counter = 0;
             for (int i = 0; i < cols; i++) {
                 for (int j = 0; j < rows; j++) {
-                    A[i][j] = counter;
-                    B[j][i] = counter;
+                    A[i][j] = 1;
+                    B[j][i] = 1;
                     counter++;
                 }
             }
@@ -57,7 +57,7 @@ public class MatrixMultiplication {
         }
 
         int[][] result = new int[rows][cols];
-        MPI.COMM_WORLD.Gatherv(C, 0, counts[rank], MPI.OBJECT, result, 0, counts, displacements, MPI.OBJECT, 0);
+        MPI.COMM_WORLD.Allgather(C, 0, counts[rank], MPI.OBJECT, result, 0, counts[rank], MPI.OBJECT);
 
         if (rank == 0) {
             long endTime = System.currentTimeMillis();
@@ -68,7 +68,7 @@ public class MatrixMultiplication {
 //                }
 //                System.out.println();
 //            }
-            System.out.println(areMatrixEqualsValue(result, 50000));
+//            System.out.println(areMatrixEqualsValue(result, 50000));
             System.out.println("Time taken: " + (endTime - startTime) + " milliseconds");
         }
 
