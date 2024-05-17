@@ -96,7 +96,7 @@ public class Mpi_mm_I {
     }
 
     public static boolean areMatrixEqualsValue(double[] firstMatrix, int value) {
-        for (int i = 0; i < NCA*NRA; i++) {
+        for (int i = 0; i < NCA * NRA; i++) {
             if (firstMatrix[i] != value) {
                 return false;
             }

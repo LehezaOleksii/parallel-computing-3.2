@@ -5,7 +5,8 @@ import mpi.MPI;
 import java.util.Random;
 
 public class Mpi_mm {
-    static final int NRA = 69; // number of rows in matrix A
+
+    static final int NRA = 79; // number of rows in matrix A
     static final int NCA = 15; // number of columns in matrix A
     static final int NCB = 7; // number of columns in matrix B
     static final int MASTER = 0; // taskid of first task
