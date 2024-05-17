@@ -50,8 +50,6 @@ public class Main {
         teachers.add(lecturer);
         lecturers.add(lecturer);
 
-
-        GradeBook gradeBook = new GradeBook();
         Set<Date> dates = new HashSet<>();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");

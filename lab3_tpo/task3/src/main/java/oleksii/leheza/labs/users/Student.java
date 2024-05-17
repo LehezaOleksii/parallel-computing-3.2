@@ -50,9 +50,7 @@ public class Student {
     public Mark getMark(Subject subject, Date date) {
         if (marks.containsKey(subject)) {
             if (subject.getLessons().contains(date)) {
-                synchronized (marks.get(subject).get(date).getId()) {
                     return marks.get(subject).get(date);
-                }
             } else {
                 System.err.println("Date is not available");
             }

@@ -24,13 +24,6 @@ public class Class {
         students.add(student);
     }
 
-    public void addLecturer(Teacher lecturer) {
-        lecturerTeachers.add(lecturer);
-    }
-
-    public void addPractitioner(Teacher practitioner) {
-        practicalTeachers.add(practitioner);
-    }
 
     @Override
     public String toString() {

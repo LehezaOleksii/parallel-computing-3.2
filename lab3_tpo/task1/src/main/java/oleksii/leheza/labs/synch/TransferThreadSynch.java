@@ -20,9 +20,9 @@ public class TransferThreadSynch extends Thread {
             int toAccount = (int) (bank.accountsNumber() * Math.random());
             int amount = (int) (maxAmount * Math.random() / REPS);
 //                bank.transferAsync(fromAccount, toAccount, amount);
-            bank.transferSyncMethod(fromAccount, toAccount, amount);
+//            bank.transferSyncMethod(fromAccount, toAccount, amount);
 //                bank.transferSyncWaitNotify(fromAccount, toAccount, amount);
-//                bank.transferSyncLock(fromAccount, toAccount, amount);
+                bank.transferSyncLock(fromAccount, toAccount, amount);
         }
     }
 }
