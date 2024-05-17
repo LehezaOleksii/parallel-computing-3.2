@@ -15,12 +15,12 @@ public class Matrix {
         matrix = new int[matrixSize][matrixSize];
         this.matrixSize = matrixSize;
     }
+
     public Matrix() {
     }
 
-    public Matrix(@JsonProperty("rows") int rows,
-                  @JsonProperty("data") int[][] matrix) {
-        this.matrixSize = rows;
+    public Matrix(@JsonProperty("data") int[][] matrix) {
+        this.matrixSize = matrix.length;
         this.matrix = matrix;
     }
 

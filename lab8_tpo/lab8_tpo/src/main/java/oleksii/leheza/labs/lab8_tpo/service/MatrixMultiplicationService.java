@@ -2,6 +2,7 @@ package oleksii.leheza.labs.lab8_tpo.service;
 
 import lombok.RequiredArgsConstructor;
 import oleksii.leheza.labs.lab8_tpo.domain.MultiplicationResult;
+import oleksii.leheza.labs.lab8_tpo.domain.MultiplicationResultDto;
 import oleksii.leheza.labs.lab8_tpo.multiplication.FoxMatrixMultiplication;
 import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.repository.demo.MultiplicationResultRepositoryDemo;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +73,18 @@ public class MatrixMultiplicationService {
         System.out.println("Finish initialize server matrix");
     }
 
-    public List<MultiplicationResult> getResult() {
-        return repository.getResults();
+    public List<MultiplicationResultDto> getResult() {
+        return repository.getResults().stream()
+                .map(this::multiplicationResultToDto)
+                .collect(Collectors.toList());
+    }
+
+    private MultiplicationResultDto multiplicationResultToDto(MultiplicationResult result) {
+        return new MultiplicationResultDto(
+                result.getId(),
+                result.getFirstMatrix().getMatrixSize(),
+                result.getSecondMatrix().getMatrixSize(),
+                result.getResultMatrix().getMatrixSize(),
+                result.getCalculationTime());
     }
 }

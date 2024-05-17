@@ -37,9 +37,9 @@
         <!-- Loop through results -->
         <tr th:each="result : ${results}">
             <td th:text="${result.id}"></td>
-            <td th:text="${result.firstMatrix}"></td>
-            <td th:text="${result.secondMatrix}"></td>
-            <td th:text="${result.resultMatrix}"></td>
+            <td th:text="${result.firstMatrixSize}"></td>
+            <td th:text="${result.secondMatrixSize}"></td>
+            <td th:text="${result.resultSize}"></td>
             <td th:text="${result.calculationTime}"></td>
         </tr>
         </tbody>

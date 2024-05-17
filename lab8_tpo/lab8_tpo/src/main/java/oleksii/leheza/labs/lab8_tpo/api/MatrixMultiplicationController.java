@@ -18,7 +18,6 @@ public class MatrixMultiplicationController {
     public ModelAndView calculateMatrix(@RequestBody MatrixPair matrixPair) {
         ModelAndView modelAndView = new ModelAndView("result_matrix");
         modelAndView.addObject("matrix_result", service.multiply(matrixPair.getFirstMatrix(), matrixPair.getSecondMatrix()));
-        //time
         return modelAndView;
     }
 
