@@ -8,6 +8,8 @@ import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.repository.demo.MultiplicationResultRepositoryDemo;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +24,12 @@ public class MatrixMultiplicationService {
     private final MultiplicationResultRepositoryDemo repository;
     private FoxMatrixMultiplication foxMatrixMultiplication = new FoxMatrixMultiplication();
 
-    public Matrix multiply(Matrix firstMatrix, Matrix secondMatrix) {
+    public Matrix multiply(Matrix firstMatrix, Matrix secondMatrix, ZonedDateTime startTime) {
         Matrix result = new Matrix(firstMatrix.matrix.length);
         foxMatrixMultiplication.foxMatrixMultiply(firstMatrix, secondMatrix, result, 4);
-        double time = 0;
-        repository.addResult(new MultiplicationResult(firstMatrix, secondMatrix, result, time));
+        Duration duration = Duration.between(startTime, ZonedDateTime.now());
+        double processingTimeMillis = duration.toMillis();
+        repository.addResult(new MultiplicationResult(firstMatrix, secondMatrix, result, processingTimeMillis));
         return result;
     }
 

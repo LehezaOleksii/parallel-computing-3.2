@@ -11,4 +11,5 @@ import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 public class MatrixPair {
     private Matrix firstMatrix;
     private Matrix secondMatrix;
+    private String startTimeStr;
 }

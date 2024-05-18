@@ -2,10 +2,18 @@ package oleksii.leheza.labs.lab8_tpo.api;
 
 import lombok.RequiredArgsConstructor;
 import oleksii.leheza.labs.lab8_tpo.domain.MatrixPair;
+import oleksii.leheza.labs.lab8_tpo.domain.ServerRequestDto;
+import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.service.MatrixMultiplicationService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.time.Duration;
+import java.time.ZonedDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,16 +24,19 @@ public class MatrixMultiplicationController {
 
     @PostMapping("/calculate/client")
     public ModelAndView calculateMatrix(@RequestBody MatrixPair matrixPair) {
+        ZonedDateTime startTime = ZonedDateTime.parse(matrixPair.getStartTimeStr());
         ModelAndView modelAndView = new ModelAndView("result_matrix");
-        modelAndView.addObject("matrix_result", service.multiply(matrixPair.getFirstMatrix(), matrixPair.getSecondMatrix()));
+        Matrix result = service.multiply(matrixPair.getFirstMatrix(), matrixPair.getSecondMatrix(),startTime);
+//        modelAndView.addObject("matrix_result",result);
         return modelAndView;
     }
 
+
     @PostMapping("/calculate/server")
-    public ModelAndView calculateMatrixInServer(@ModelAttribute int matrixSize) {
+    public ModelAndView calculateMatrixInServer(@RequestBody ServerRequestDto dto) {
         ModelAndView modelAndView = new ModelAndView("result_matrix");
-        modelAndView.addObject("matrix_result", service.multiply(matrixSize));
-        //time
+        modelAndView.addObject("matrix_result", service.multiply(dto.getMatrixSize()));
+
         return modelAndView;
     }
 
