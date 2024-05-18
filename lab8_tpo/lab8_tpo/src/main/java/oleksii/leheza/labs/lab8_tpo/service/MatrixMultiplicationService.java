@@ -90,4 +90,8 @@ public class MatrixMultiplicationService {
                 result.getResultMatrix().getMatrixSize(),
                 result.getCalculationTime());
     }
+
+    public Matrix getLastResult() {
+        return repository.getResults().get(repository.getResults().size() - 1).getResultMatrix();
+    }
 }

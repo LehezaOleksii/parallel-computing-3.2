@@ -7,10 +7,12 @@ import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.service.MatrixMultiplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.Duration;
 import java.time.ZonedDateTime;
 
 @Controller
@@ -30,7 +32,7 @@ public class MatrixMultiplicationController {
     @GetMapping("/result_matrix")
     public ModelAndView calculateMatrixInServer() {
         ModelAndView modelAndView = new ModelAndView("result_matrix");
-//        modelAndView.addObject("matrix", matrix);
+        modelAndView.addObject("matrix", service.getLastResult());
         return modelAndView;
     }
 
