@@ -2,7 +2,6 @@ package oleksii.leheza.labs.lab8_tpo.api;
 
 import lombok.RequiredArgsConstructor;
 import oleksii.leheza.labs.lab8_tpo.domain.MatrixPair;
-import oleksii.leheza.labs.lab8_tpo.domain.ServerRequestDto;
 import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.service.MatrixMultiplicationService;
 import org.springframework.http.ResponseEntity;
