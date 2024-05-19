@@ -33,22 +33,14 @@ public class MatrixMultiplicationService {
         return result;
     }
 
-    public Matrix multiply(int matrixSize) {
+    public Matrix multiply(int matrixSize, ZonedDateTime startTime) {
         Matrix matrix1 = matrixMap1.get(matrixSize);
         Matrix matrix2 = matrixMap2.get(matrixSize);
-
-        Matrix result = new Matrix(matrix1.matrix.length);
-        for (int i = 0; i < matrix1.getMatrix().length; i++) {
-            for (int j = 0; j < matrix2.getMatrix().length; j++) {
-                int sum = 0;
-                for (int k = 0; k < matrix1.getMatrix().length; k++) {
-                    sum += matrix1.matrix[i][k] * matrix2.matrix[k][j];
-                }
-                result.matrix[i][j] = sum;
-            }
-        }
-        double time = 0;
-        repository.addResult(new MultiplicationResult(matrix1, matrix2, result, time));
+        Matrix result = new Matrix(matrixSize);
+        foxMatrixMultiplication.foxMatrixMultiply(matrix1, matrix2, result, 4);
+        Duration duration = Duration.between(startTime, ZonedDateTime.now());
+        double processingTimeMillis = duration.toMillis();
+        repository.addResult(new MultiplicationResult(matrix1, matrix2, result, processingTimeMillis));
         return result;
     }
 
@@ -58,7 +50,7 @@ public class MatrixMultiplicationService {
             int counter = 0;
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    matrix.matrix[i][j] = counter++;
+                    matrix.matrix[i][j] = 1;
                 }
             }
             matrixMap1.put(size, matrix);
@@ -68,7 +60,7 @@ public class MatrixMultiplicationService {
             int counter = 0;
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    matrix.matrix[i][j] = counter++;
+                    matrix.matrix[i][j] = 1;
                 }
             }
             matrixMap2.put(size, matrix);

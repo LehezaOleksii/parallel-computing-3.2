@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,11 +38,11 @@ public class MatrixMultiplicationController {
     }
 
     @PostMapping("/calculate/server")
-    public ModelAndView calculateMatrixInServer(@RequestBody ServerRequestDto dto) {
-        ModelAndView modelAndView = new ModelAndView("result_matrix");
-        modelAndView.addObject("matrix_result", service.multiply(dto.getMatrixSize()));
-
-        return modelAndView;
+    public ResponseEntity<Matrix> calculateMatrixInServer(@RequestBody Map<String, Integer> requestBody) {
+        int size = requestBody.get("size");
+        ZonedDateTime startTime = ZonedDateTime.now();
+        Matrix result = service.multiply(size, startTime);
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/results")
