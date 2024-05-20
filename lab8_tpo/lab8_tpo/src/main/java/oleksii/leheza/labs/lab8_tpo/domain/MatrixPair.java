@@ -3,7 +3,6 @@ package oleksii.leheza.labs.lab8_tpo.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 
 @Getter
 @Setter
