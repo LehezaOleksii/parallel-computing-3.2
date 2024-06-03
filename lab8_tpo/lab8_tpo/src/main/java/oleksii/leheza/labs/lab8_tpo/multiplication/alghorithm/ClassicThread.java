@@ -1,8 +1,7 @@
 package oleksii.leheza.labs.lab8_tpo.multiplication.alghorithm;
 
-import oleksii.leheza.labs.lab8_tpo.domain.Matrix;
+import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.multiplication.util.Synchronizer;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 

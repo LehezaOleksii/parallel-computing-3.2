@@ -2,7 +2,7 @@ package oleksii.leheza.labs.lab8_tpo.api;
 
 import lombok.RequiredArgsConstructor;
 import oleksii.leheza.labs.lab8_tpo.domain.MatrixPair;
-import oleksii.leheza.labs.lab8_tpo.domain.Matrix;
+import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.service.MatrixMultiplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,13 +29,6 @@ public class MatrixMultiplicationController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/result_matrix")
-    public ModelAndView calculateMatrixInServer() {
-        ModelAndView modelAndView = new ModelAndView("result_matrix");
-        modelAndView.addObject("matrix", service.getLastResult());
-        return modelAndView;
-    }
-
     @PostMapping("/calculate/server")
     public ResponseEntity<Matrix> calculateMatrixInServer(@RequestBody Map<String, Integer> requestBody) {
         int size = requestBody.get("size");
@@ -43,6 +36,15 @@ public class MatrixMultiplicationController {
         Matrix result = service.multiply(size, startTime);
         return ResponseEntity.ok().body(result);
     }
+
+
+    @GetMapping("/result_matrix")
+    public ModelAndView getResult() {
+        ModelAndView modelAndView = new ModelAndView("result_matrix");
+        modelAndView.addObject("matrix", service.getLastResult());
+        return modelAndView;
+    }
+
 
     @GetMapping("/results")
     public ModelAndView getResults() {

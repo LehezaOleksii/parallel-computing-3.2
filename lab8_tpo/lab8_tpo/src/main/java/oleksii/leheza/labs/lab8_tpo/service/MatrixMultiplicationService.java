@@ -3,7 +3,7 @@ package oleksii.leheza.labs.lab8_tpo.service;
 import lombok.RequiredArgsConstructor;
 import oleksii.leheza.labs.lab8_tpo.domain.MultiplicationResult;
 import oleksii.leheza.labs.lab8_tpo.domain.MultiplicationResultDto;
-import oleksii.leheza.labs.lab8_tpo.domain.Matrix;
+import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.multiplication.alghorithm.StripedMatrixMultiplication;
 import oleksii.leheza.labs.lab8_tpo.repository.demo.MultiplicationResultRepositoryDemo;
 import org.springframework.stereotype.Service;
@@ -34,14 +34,14 @@ public class MatrixMultiplicationService {
     }
 
     public Matrix multiply(int matrixSize, ZonedDateTime startTime) {
-        Matrix matrix1 = matrixMap1.get(matrixSize);
-        Matrix matrix2 = matrixMap2.get(matrixSize);
-        Matrix result = new Matrix(matrixSize);
-        StripedMatrixMultiplication stripedMatrixMultiplication = new StripedMatrixMultiplication(matrix1, matrix2, 4, result);
+        Matrix firstMatrix = matrixMap1.get(matrixSize);
+        Matrix secondMatrix = matrixMap2.get(matrixSize);
+        Matrix result = new Matrix(firstMatrix.matrix.length);
+        StripedMatrixMultiplication stripedMatrixMultiplication = new StripedMatrixMultiplication(firstMatrix, secondMatrix, 4, result);
         stripedMatrixMultiplication.multiply();
         Duration duration = Duration.between(startTime, ZonedDateTime.now());
         double processingTimeMillis = duration.toMillis();
-        repository.addResult(new MultiplicationResult(matrix1, matrix2, result, processingTimeMillis));
+        repository.addResult(new MultiplicationResult(firstMatrix, secondMatrix, result, processingTimeMillis));
         return result;
     }
 

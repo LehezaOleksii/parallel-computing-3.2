@@ -1,13 +1,11 @@
-package oleksii.leheza.labs.lab8_tpo.domain;
+package oleksii.leheza.labs.lab8_tpo.multiplication;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 
-@Getter
 @Setter
 @ToString
 public class Matrix {
@@ -25,6 +23,8 @@ public class Matrix {
 
     public Matrix(@JsonProperty("data") int[][] matrix) {
         this.matrixSize = matrix.length;
+        System.out.println(matrix.length);
+        System.out.println(matrix[1].length);
         this.matrix = matrix;
     }
 

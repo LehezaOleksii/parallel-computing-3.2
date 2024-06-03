@@ -1,6 +1,6 @@
 package oleksii.leheza.labs.lab8_tpo.multiplication.alghorithm;
 
-import oleksii.leheza.labs.lab8_tpo.domain.Matrix;
+import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.multiplication.util.Synchronizer;
 
 import java.util.LinkedList;
@@ -25,9 +25,6 @@ public class StripedMatrixMultiplication {
     }
 
     public void multiply() {
-        if (firstMatrix.getRow(0).length != secondMatrix.getColumn(0).length) {
-            throw new RuntimeException("Different length");
-        }
 
         //prepare thread
         synchronizer = new Synchronizer();
