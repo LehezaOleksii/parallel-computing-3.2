@@ -5,6 +5,7 @@ import oleksii.leheza.labs.lab8_tpo.domain.MultiplicationResult;
 import oleksii.leheza.labs.lab8_tpo.domain.MultiplicationResultDto;
 import oleksii.leheza.labs.lab8_tpo.multiplication.Matrix;
 import oleksii.leheza.labs.lab8_tpo.multiplication.alghorithm.StripedMatrixMultiplication;
+import oleksii.leheza.labs.lab8_tpo.multiplication.fox.FoxMatrixMultiplication;
 import oleksii.leheza.labs.lab8_tpo.repository.demo.MultiplicationResultRepositoryDemo;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,10 @@ public class MatrixMultiplicationService {
 
     public Matrix multiply(Matrix firstMatrix, Matrix secondMatrix, ZonedDateTime startTime) {
         Matrix result = new Matrix(firstMatrix.matrix.length);
-        StripedMatrixMultiplication stripedMatrixMultiplication = new StripedMatrixMultiplication(firstMatrix, secondMatrix, 4, result);
-        stripedMatrixMultiplication.multiply();
+//        StripedMatrixMultiplication stripedMatrixMultiplication = new StripedMatrixMultiplication(firstMatrix, secondMatrix, 4, result);
+        FoxMatrixMultiplication foxMatrixMultiplication = new FoxMatrixMultiplication();
+//        stripedMatrixMultiplication.multiply();
+        foxMatrixMultiplication.foxMatrixMultiply(firstMatrix, secondMatrix, result, 4);
         Duration duration = Duration.between(startTime, ZonedDateTime.now());
         double processingTimeMillis = duration.toMillis();
         repository.addResult(new MultiplicationResult(firstMatrix, secondMatrix, result, processingTimeMillis));
@@ -37,8 +40,10 @@ public class MatrixMultiplicationService {
         Matrix firstMatrix = matrixMap1.get(matrixSize);
         Matrix secondMatrix = matrixMap2.get(matrixSize);
         Matrix result = new Matrix(firstMatrix.matrix.length);
-        StripedMatrixMultiplication stripedMatrixMultiplication = new StripedMatrixMultiplication(firstMatrix, secondMatrix, 4, result);
-        stripedMatrixMultiplication.multiply();
+//        StripedMatrixMultiplication stripedMatrixMultiplication = new StripedMatrixMultiplication(firstMatrix, secondMatrix, 4, result);
+        FoxMatrixMultiplication foxMatrixMultiplication = new FoxMatrixMultiplication();
+//        stripedMatrixMultiplication.multiply();
+        foxMatrixMultiplication.foxMatrixMultiply(firstMatrix, secondMatrix, result, 4);
         Duration duration = Duration.between(startTime, ZonedDateTime.now());
         double processingTimeMillis = duration.toMillis();
         repository.addResult(new MultiplicationResult(firstMatrix, secondMatrix, result, processingTimeMillis));
